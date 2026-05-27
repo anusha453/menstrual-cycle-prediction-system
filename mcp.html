@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Menstrual Cycle Prediction</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #ffe6eb, #fff);
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #242223;
+    margin-top: 20px;
+}
+
+.container {
+    max-width: 500px;
+    background: white;
+    padding: 25px;
+    margin: 30px auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.container:hover {
+    transform: scale(1.02);
+}
+
+label {
+    font-weight: 600;
+    margin-top: 10px;
+    display: block;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* 🔥 1. Button Animation */
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #230511, #ad1457);
+    color: white;
+    border: none;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.1s ease;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+/* 💫 2. Fade-in Result */
+.result {
+    margin-top: 20px;
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.result.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.highlight {
+    color: #181415;
+    font-weight: bold;
+}
+
+/* 🎉 7. Celebration Animation */
+@keyframes pop {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+}
+
+.celebrate {
+    font-size: 30px;
+    text-align: center;
+    animation: pop 0.5s ease;
+}
+</style>
+</head>
+
+<body>
+
+<h1> Menstrual Cycle Prediction System</h1>
+
+<div class="container">
+
+    <label>Last Period Date</label>
+    <input type="date" id="lastDate">
+
+    <label>Average Cycle Length (days)</label>
+    <input type="number" id="cycle" placeholder="Eg: 28">
+
+    <label>Stress Level (1–5)</label>
+    <input type="number" id="stress" placeholder="1 = Low, 5 = High">
+
+    <label>Sleep Hours</label>
+    <input type="number" id="sleep" placeholder="Eg: 7">
+
+    <label>Exercise Level (1–5)</label>
+    <input type="number" id="exercise" placeholder="1 = Low, 5 = High">
+
+    <button onclick="predictCycle()">Predict</button>
+
+    <div class="result" id="output"></div>
+</div>
+
+<script>
+function predictCycle() {
+
+    let lastDate = new Date(document.getElementById("lastDate").value);
+    let cycle = parseInt(document.getElementById("cycle").value);
+    let stress = parseInt(document.getElementById("stress").value);
+    let sleep = parseInt(document.getElementById("sleep").value);
+    let exercise = parseInt(document.getElementById("exercise").value);
+
+    if (!lastDate || isNaN(cycle)) {
+        alert("Please enter required fields!");
+        return;
+    }
+
+    let delay = 0;
+
+    if (stress >= 4) delay += 2;
+    if (sleep < 6) delay += 1;
+    if (exercise <= 2) delay += 1;
+
+    let expectedCycle = cycle + delay;
+
+    let nextDate = new Date(lastDate);
+    nextDate.setDate(nextDate.getDate() + expectedCycle);
+
+    let result = "";
+
+    result += "<h3>📊 Prediction Result</h3>";
+    result += "<p><b>Predicted Delay Days:</b> <span class='highlight'>" + delay + "</span></p>";
+    result += "<p><b>Expected Cycle Length:</b> <span class='highlight'>" + expectedCycle + " days</span></p>";
+    result += "<p><b>Next Cycle Date:</b> <span class='highlight'>" + nextDate.toDateString() + "</span></p>";
+
+    result += "<h3>💡 Health Suggestions</h3>";
+
+    if (delay > 2) {
+        result += "<ul>";
+        result += "<li>High chance of delayed cycle</li>";
+        result += "<li>Practice yoga or meditation 🧘</li>";
+        result += "<li>Sleep at least 7–8 hours</li>";
+        result += "<li>Increase physical activity</li>";
+        result += "</ul>";
+    } else {
+        result += "<ul>";
+        result += "<li>Your cycle looks regular ✅</li>";
+        result += "<li>Maintain your healthy routine</li>";
+        result += "<li>Stay hydrated</li>";
+        result += "</ul>";
+
+        /* 🎉 Show celebration if cycle is normal */
+        result += "<div class='celebrate'>🎉✨</div>";
+    }
+
+    result += "<h3>🥗 Diet Tips</h3>";
+    result += "<ul>";
+    result += "<li>Iron-rich foods: Spinach, dates, jaggery</li>";
+    result += "<li>Fruits: Apple, pomegranate</li>";
+    result += "<li>Protein: Dal, tofu, eggs</li>";
+    result += "<li>Drink 8–10 glasses of water</li>";
+    result += "</ul>";
+
+    let outputBox = document.getElementById("output");
+    outputBox.innerHTML = result;
+
+    /* 💫 Trigger fade-in */
+    outputBox.classList.remove("show");
+    setTimeout(() => outputBox.classList.add("show"), 100);
+}
+</script>
+
+</body>
+</html>
